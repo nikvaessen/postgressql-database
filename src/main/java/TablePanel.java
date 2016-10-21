@@ -14,15 +14,6 @@ import java.util.ArrayList;
  */
 public class TablePanel extends JPanel {
 
-//    private static final String[] columnNames = {"id", "name", "salary"};
-//    private static final String[][] data = {
-//            {"1", "nik",     "10000"},
-//            {"2", "carla",    "9000"},
-//            {"3", "philip",   "8000"},
-//            {"4", "bianca",   "7000"},
-//            {"5", "michael",  "6000"},
-//    };
-
     private Database database;
     private String[] columnNames = new String[0];
     private String[][] data = new String[0][0];
@@ -32,12 +23,12 @@ public class TablePanel extends JPanel {
     public TablePanel(Database database) {
         this.database = database;
         showCustomerData();
-        updateTable();
 
         //add pane and buttons to panel
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(500, 500));
         this.add(new ButtonPanel(), BorderLayout.NORTH);
+        updateTable();
     }
 
     private void updateTable(){
