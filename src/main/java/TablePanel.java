@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,68 +26,31 @@ public class TablePanel extends JPanel {
     private Database database;
     private String[] columnNames = new String[0];
     private String[][] data = new String[0][0];
+    private JTable table;
+    private JScrollPane pane;
 
-    public TablePanel(Database database)
-    {
+    public TablePanel(Database database) {
         this.database = database;
-
-        JTable table = new JTable(new UneditedAbleTableModel());
-        JScrollPane pane = new JScrollPane(table);
-
-        //add buttons for the 4 different views
-        JButton customerButton = new JButton("View Customers");
-        customerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                showCustomerData();
-                repaint();
-            }
-        });
-
-        JButton transactionButton = new JButton("View Transactions");
-        transactionButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                showTransactionData();
-                repaint();
-            }
-        });
-
-        JButton pointOfSaleButton = new JButton("View Point of sales");
-        pointOfSaleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                showPointOfSaleData();
-                repaint();
-            }
-        });
-
-        JButton companyButton = new JButton("View Companies");
-        companyButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                showCustomerData();
-                repaint();
-            }
-        });
+        showCustomerData();
+        updateTable();
 
         //add pane and buttons to panel
-        this.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        this.setLayout(new BorderLayout());
+        this.setPreferredSize(new Dimension(500, 500));
+        this.add(new ButtonPanel(), BorderLayout.NORTH);
+    }
 
-        c.gridx = 0;
-        this.add(companyButton, c);
-
-        c.gridx++;
-        this.add(pointOfSaleButton, c);
-
-        c.gridx++;
-        this.add(transactionButton, c);
-
-        c.gridx++;
-        this.add(customerButton, c);
-
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth  = 5;
-        c.gridheight = 5;
-        this.add(pane, c);
+    private void updateTable(){
+        if(pane != null)
+        {
+            this.remove(pane);
+        }
+        table = new JTable(new UneditedAbleTableModel());
+        pane  = new JScrollPane(table);
+        this.add(pane);
+        this.repaint();
+        this.revalidate();
+        System.out.println("added pane to panel");
     }
 
     private void showTransactionData()
@@ -226,6 +190,48 @@ public class TablePanel extends JPanel {
         public boolean isCellEditable(int row, int column)
         {
             return false;
+        }
+    }
+
+    private class ButtonPanel extends JPanel{
+        public ButtonPanel() {
+            //add buttons for the 4 different views
+            JButton customerButton = new JButton("View Customers");
+            customerButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showCustomerData();
+                    updateTable();
+                }
+            });
+
+            JButton transactionButton = new JButton("View Transactions");
+            transactionButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showTransactionData();
+                    updateTable();
+                }
+            });
+
+            JButton pointOfSaleButton = new JButton("View Point of sales");
+            pointOfSaleButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showPointOfSaleData();
+                    updateTable();
+                }
+            });
+
+            JButton companyButton = new JButton("View Companies");
+            companyButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showCompanyData();
+                    updateTable();
+                }
+            });
+            this.setLayout(new GridLayout(1, 4));
+            this.add(customerButton);
+            this.add(pointOfSaleButton);
+            this.add(transactionButton);
+            this.add(companyButton);
         }
     }
 }
