@@ -14,6 +14,8 @@ public class Database {
     private static final String pointOfSaleQuery = "select * from Point_of_Sale";
     private static final String transactionQuery = "select * from Transaction";
     private static final String companyQuery     = "select * from Company";
+    private static final String cardsQuery       = "select * from customer_cards";
+    private static final String custTransQuery   = "select * from customer_transactions";
 
     private SelectQuery query;
 
@@ -45,6 +47,18 @@ public class Database {
             throws SQLException
     {
         return query.getData(companyQuery);
+    }
+
+    public ResultSet getTransactionPerCostumer()
+            throws SQLException
+    {
+        return query.getData(custTransQuery);
+    }
+
+    public ResultSet getCardsPerCustomer()
+            throws SQLException
+    {
+        return query.getData(cardsQuery);
     }
 
     public ResultSet getCustomResult(String sQuery)

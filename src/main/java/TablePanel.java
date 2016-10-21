@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -92,7 +91,29 @@ public class TablePanel extends JPanel {
         }
     }
 
+    private void showCardsPerCustomer()
+    {
+        try
+        {
+            setData(database.getCardsPerCustomer());
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
+    private void showTransactionPerCustomer()
+    {
+        try
+        {
+            setData(database.getTransactionPerCostumer());
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 
     private void setData(ResultSet set)
@@ -216,11 +237,30 @@ public class TablePanel extends JPanel {
                     updateTable();
                 }
             });
-            this.setLayout(new GridLayout(1, 4));
+
+            JButton viewButton = new JButton("Cards per Customer");
+            viewButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showCardsPerCustomer();
+                    updateTable();
+                }
+            });
+
+            JButton view1Button = new JButton("Transactions per Customer");
+            view1Button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    showTransactionPerCustomer();
+                    updateTable();
+                }
+            });
+
+            this.setLayout(new GridLayout(1, 6));
             this.add(customerButton);
             this.add(pointOfSaleButton);
             this.add(transactionButton);
             this.add(companyButton);
+            this.add(viewButton);
+            this.add(view1Button);
         }
     }
 
