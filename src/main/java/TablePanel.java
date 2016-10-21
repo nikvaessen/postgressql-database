@@ -28,6 +28,7 @@ public class TablePanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(500, 500));
         this.add(new ButtonPanel(), BorderLayout.NORTH);
+        this.add(new CustomQueryPanel(), BorderLayout.SOUTH);
         updateTable();
     }
 
@@ -41,7 +42,6 @@ public class TablePanel extends JPanel {
         this.add(pane);
         this.repaint();
         this.revalidate();
-        System.out.println("added pane to panel");
     }
 
     private void showTransactionData()
@@ -141,10 +141,8 @@ public class TablePanel extends JPanel {
                 String[] row = table.get(i);
                 for(int j = 0; j < row.length; j++)
                 {
-                    System.out.print(row[j]);
                     data[i][j] = row[j];
                 }
-                System.out.println();
             }
             this.data = data;
         }
@@ -223,6 +221,49 @@ public class TablePanel extends JPanel {
             this.add(pointOfSaleButton);
             this.add(transactionButton);
             this.add(companyButton);
+        }
+    }
+
+    private class CustomQueryPanel
+        extends JPanel
+    {
+        public JTextField input;
+        public JButton    button;
+
+        public CustomQueryPanel()
+        {
+            input = new JTextField();
+            input.addActionListener(new FieldActionListener());
+            button = new JButton("Enter");
+            button.addActionListener(new FieldActionListener());
+
+            this.setLayout(new GridLayout(2,1));
+            this.add(input);
+            this.add(button);
+        }
+
+        private class FieldActionListener
+            implements ActionListener
+        {
+            public void actionPerformed(ActionEvent actionEvent) {
+                doQuery();
+                input.setText("");
+            }
+        }
+
+        public void doQuery()
+        {
+            try
+            {
+                ResultSet resultSet = database.getCustomResult(input.getText());
+                updateData(resultSet);
+                updateColumnNames(resultSet);
+                updateTable();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

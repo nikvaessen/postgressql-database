@@ -47,4 +47,9 @@ public class Database {
         return query.getData(companyQuery);
     }
 
+    public ResultSet getCustomResult(String sQuery)
+        throws SQLException
+    {
+        return query.getData(sQuery);
+    }
 }
